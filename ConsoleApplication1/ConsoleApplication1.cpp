@@ -3,25 +3,29 @@
 using namespace std;
 
 int main() {
-    const int C = 3;
-    double ids[C];
-    string Nome[C];
-    for (int l = 0; l < 3; l++) {
-        bool repetido;
-        do {
-            repetido = false;
-            cout << "Digite o Codigo do Produto do " << l+1 << " : ";
-            cin >> ids[l];
-            for (int i = 0; i < l; i++) {
-                if (ids[l] == ids[i]) {
-                    repetido = true;
-                    cout << "Codigo ja existe! Tente outro." << endl;
-                }
-            }
-        } while (repetido); // Repete enquanto encontrar um valor igual
-        cout << "Digite o nome do Produto do " << l+1 << " : ";
-        cin >> Nome[l];
-        
-    }
-    return 0;
+	const int C = 3;
+	char uuid[C];
+	string Nome[C];
+	int peco[C];
+	for (int l = 0; l < 3; l++) {
+		cout << "=== Produto " << l+1 << " ==="<<"\n";
+		bool repetido;
+		do {
+			repetido = false;
+			cout << "Digite o Codigo: ";
+			cin >> uuid[l];
+			for (int i = 0; i < l; i++) {
+				if (uuid[l] == uuid[i]) {
+					repetido = true;
+					cout << "Codigo ja existe! Tente outro." << endl;
+				}
+			}
+		} while (repetido); // Repete enquanto encontrar um valor igual
+		cout << "Digite o nome: ";
+		cin >> Nome[l];
+		cout << "Digite o peço: ";
+		cin >> peco[l];
+		cout << "\n";
+	}
+	return 0;
 }
