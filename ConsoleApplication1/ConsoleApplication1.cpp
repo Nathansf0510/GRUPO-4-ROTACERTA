@@ -86,9 +86,11 @@ void cadastrarEncomenda(vector<Encomenda>& encomendas, int& contadorOrdem) {
         getline(cin, nova.codigo);
         if (nova.codigo.empty()) {
             cout << "[Erro] O codigo nao pode ser vazio.\n";
-        } else if (codigoExiste(encomendas, nova.codigo)) {
+        }
+        else if (codigoExiste(encomendas, nova.codigo)) {
             cout << "[Erro] Ja existe uma encomenda com este codigo.\n";
-        } else {
+        }
+        else {
             break;
         }
     }
@@ -142,23 +144,27 @@ ResultadoPlano executarPlano(
                 return a.volume < b.volume;
             }
             return a.ordemCadastro < b.ordemCadastro;
-        } else {
+        }
+        else {
             // Plano A: ordem de cadastro
             return a.ordemCadastro < b.ordemCadastro;
         }
-    });
+        });
 
     // Avaliação de restrições (Requisito 4)
     const double EPS = 1e-9;
 
     for (const auto& e : candidatas) {
         if (e.precisaRefrigeracao && !veiculo.temRefrigeracao) {
-            resultado.pendentes.push_back({e, "Falta de refrigeracao"});
-        } else if (e.peso > resultado.pesoRestante + EPS) {
-            resultado.pendentes.push_back({e, "Excesso de peso"});
-        } else if (e.volume > resultado.volumeRestante + EPS) {
-            resultado.pendentes.push_back({e, "Excesso de volume"});
-        } else {
+            resultado.pendentes.push_back({ e, "Falta de refrigeracao" });
+        }
+        else if (e.peso > resultado.pesoRestante + EPS) {
+            resultado.pendentes.push_back({ e, "Excesso de peso" });
+        }
+        else if (e.volume > resultado.volumeRestante + EPS) {
+            resultado.pendentes.push_back({ e, "Excesso de volume" });
+        }
+        else {
             // Encomenda aprovada
             resultado.selecionadas.push_back(e);
             resultado.pesoRestante -= e.peso;
@@ -183,24 +189,26 @@ void exibirResultadoPlano(const ResultadoPlano& plano) {
     cout << ">> ENCOMENDAS SELECIONADAS (" << plano.selecionadas.size() << "):\n";
     if (plano.selecionadas.empty()) {
         cout << "   Nenhuma encomenda selecionada.\n";
-    } else {
+    }
+    else {
         for (const auto& e : plano.selecionadas) {
             cout << "   - [" << e.codigo << "] "
-                 << (e.prioritaria ? "[PRIORITARIA] " : "[Normal]      ")
-                 << "Peso: " << e.peso << " kg | Vol: " << e.volume << " m3 | "
-                 << (e.precisaRefrigeracao ? "Refrig: Sim" : "Refrig: Nao") << "\n";
+                << (e.prioritaria ? "[PRIORITARIA] " : "[Normal]      ")
+                << "Peso: " << e.peso << " kg | Vol: " << e.volume << " m3 | "
+                << (e.precisaRefrigeracao ? "Refrig: Sim" : "Refrig: Nao") << "\n";
         }
     }
 
     cout << "\n>> ENCOMENDAS PENDENTES / NAO ATENDIDAS (" << plano.pendentes.size() << "):\n";
     if (plano.pendentes.empty()) {
         cout << "   Nenhuma encomenda pendente para este destino.\n";
-    } else {
+    }
+    else {
         for (const auto& item : plano.pendentes) {
             cout << "   - [" << item.encomenda.codigo << "] "
-                 << (item.encomenda.prioritaria ? "[PRIORITARIA] " : "[Normal]      ")
-                 << "Peso: " << item.encomenda.peso << " kg | Vol: " << item.encomenda.volume << " m3 "
-                 << "-> Motivo: " << item.motivo << "\n";
+                << (item.encomenda.prioritaria ? "[PRIORITARIA] " : "[Normal]      ")
+                << "Peso: " << item.encomenda.peso << " kg | Vol: " << item.encomenda.volume << " m3 "
+                << "-> Motivo: " << item.motivo << "\n";
         }
     }
 
@@ -219,47 +227,42 @@ void exibirRecomendacao(const ResultadoPlano& planoA, const ResultadoPlano& plan
 
     if (planoA.qtdPrioritariasAtendidas > planoB.qtdPrioritariasAtendidas) {
         cout << "Recomendado: PLANO A (atendeu mais encomendas prioritarias: "
-             << planoA.qtdPrioritariasAtendidas << " vs " << planoB.qtdPrioritariasAtendidas << ").\n";
-    } else if (planoB.qtdPrioritariasAtendidas > planoA.qtdPrioritariasAtendidas) {
+            << planoA.qtdPrioritariasAtendidas << " vs " << planoB.qtdPrioritariasAtendidas << ").\n";
+    }
+    else if (planoB.qtdPrioritariasAtendidas > planoA.qtdPrioritariasAtendidas) {
         cout << "Recomendado: PLANO B (atendeu mais encomendas prioritarias: "
-             << planoB.qtdPrioritariasAtendidas << " vs " << planoA.qtdPrioritariasAtendidas << ").\n";
-    } else {
+            << planoB.qtdPrioritariasAtendidas << " vs " << planoA.qtdPrioritariasAtendidas << ").\n";
+    }
+    else {
         // Empate em prioritárias -> desempate pelo total de encomendas
         if (planoA.selecionadas.size() > planoB.selecionadas.size()) {
             cout << "Recomendado: PLANO A (empate em prioritarias, mas atendeu mais encomendas no total: "
-                 << planoA.selecionadas.size() << " vs " << planoB.selecionadas.size() << ").\n";
-        } else if (planoB.selecionadas.size() > planoA.selecionadas.size()) {
+                << planoA.selecionadas.size() << " vs " << planoB.selecionadas.size() << ").\n";
+        }
+        else if (planoB.selecionadas.size() > planoA.selecionadas.size()) {
             cout << "Recomendado: PLANO B (empate em prioritarias, mas atendeu mais encomendas no total: "
-                 << planoB.selecionadas.size() << " vs " << planoA.selecionadas.size() << ").\n";
-        } else {
+                << planoB.selecionadas.size() << " vs " << planoA.selecionadas.size() << ").\n";
+        }
+        else {
             cout << "Os planos sao EQUIVALENTES (mesma quantidade de prioritarias e de encomendas totais).\n";
         }
     }
     cout << "******************************************************\n";
 }
-
-// Carrega o cenário exato do Teste de Aceitação
-void executarTesteAceitacao(vector<Encomenda>& encomendas, int& contadorOrdem) {
-    encomendas.clear();
-    contadorOrdem = 0;
-
-    encomendas.push_back({"P1", "Centro", 50.0, 0.70, true, false, ++contadorOrdem});
-    encomendas.push_back({"P2", "Centro", 30.0, 0.45, true, false, ++contadorOrdem});
-    encomendas.push_back({"P3", "Centro", 30.0, 0.45, true, false, ++contadorOrdem});
-
-    Veiculo v{"Centro", 100.0, 1.0, false};
-
-    cout << "\n[TESTE DE ACEITACAO CARREGADO]\n";
-    cout << "Veiculo: Destino = Centro | Cap. Peso = 100 kg | Cap. Volume = 1 m3 | Refrig = Nao\n";
-    cout << "Encomendas: P1 (50kg, 0.70m3), P2 (30kg, 0.45m3), P3 (30kg, 0.45m3) - Todas Prioritarias.\n";
-
-    ResultadoPlano planoA = executarPlano("PLANO A (Ordem de Cadastro)", encomendas, v, false);
-    ResultadoPlano planoB = executarPlano("PLANO B (Menor Volume Primeiro)", encomendas, v, true);
-
-    exibirResultadoPlano(planoA);
-    exibirResultadoPlano(planoB);
-    exibirRecomendacao(planoA, planoB);
-}
+void last_encomendas(vector<Encomenda>& encomendas, int& contadorOrdem) {
+    if (contadorOrdem != 0) {
+        encomendas.pop_back();
+        --contadorOrdem;
+    }
+    cout << "\n--- ENCOMENDAS CADASTRADAS (" << encomendas.size() << ") ---\n";
+    for (const auto& e : encomendas) {
+        cout << "#" << e.ordemCadastro << " [" << e.codigo << "] Destino: " << e.destino
+            << " | Peso: " << e.peso << " kg"
+            << " | Vol: " << e.volume << " m3"
+            << " | Prioritaria: " << (e.prioritaria ? "Sim" : "Nao")
+            << " | Refrig: " << (e.precisaRefrigeracao ? "Sim" : "Nao") << "\n";
+    }
+};
 
 int main() {
     vector<Encomenda> encomendas;
@@ -271,7 +274,7 @@ int main() {
         cout << "1. Cadastrar encomenda\n";
         cout << "2. Listar encomendas cadastradas\n";
         cout << "3. Simular planos para um veiculo\n";
-        cout << "4. Executar Teste de Aceitacao automatico\n";
+        cout << "4. Remover a ultima linha\n";
         cout << "0. Sair\n";
         cout << "Escolha uma opcao: ";
 
@@ -282,55 +285,54 @@ int main() {
         limparBuffer();
 
         switch (opcao) {
-            case 1:
-                cadastrarEncomenda(encomendas, contadorOrdem);
-                break;
+        case 1:
+            cadastrarEncomenda(encomendas, contadorOrdem);
+            break;
 
-            case 2:
-                cout << "\n--- ENCOMENDAS CADASTRADAS (" << encomendas.size() << ") ---\n";
-                for (const auto& e : encomendas) {
-                    cout << "#" << e.ordemCadastro << " [" << e.codigo << "] Destino: " << e.destino
-                         << " | Peso: " << e.peso << " kg"
-                         << " | Vol: " << e.volume << " m3"
-                         << " | Prioritaria: " << (e.prioritaria ? "Sim" : "Nao")
-                         << " | Refrig: " << (e.precisaRefrigeracao ? "Sim" : "Nao") << "\n";
-                }
-                break;
+        case 2:
+            cout << "\n--- ENCOMENDAS CADASTRADAS (" << encomendas.size() << ") ---\n";
+            for (const auto& e : encomendas) {
+                cout << "#" << e.ordemCadastro << " [" << e.codigo << "] Destino: " << e.destino
+                    << " | Peso: " << e.peso << " kg"
+                    << " | Vol: " << e.volume << " m3"
+                    << " | Prioritaria: " << (e.prioritaria ? "Sim" : "Nao")
+                    << " | Refrig: " << (e.precisaRefrigeracao ? "Sim" : "Nao") << "\n";
+            }
+            break;
 
-            case 3: {
-                if (encomendas.empty()) {
-                    cout << "[Aviso] Cadastre ao menos uma encomenda antes de simular.\n";
-                    break;
-                }
-                Veiculo v;
-                do {
-                    cout << "Destino atendido pelo veiculo: ";
-                    getline(cin, v.destinoAtendido);
-                } while (v.destinoAtendido.empty());
-
-                v.capPeso = lerDoublePositivo("Capacidade de peso do veiculo (kg): ");
-                v.capVolume = lerDoublePositivo("Capacidade de volume do veiculo (m3): ");
-                v.temRefrigeracao = lerSimNao("O veiculo possui refrigeracao?");
-
-                ResultadoPlano planoA = executarPlano("PLANO A (Ordem de Cadastro)", encomendas, v, false);
-                ResultadoPlano planoB = executarPlano("PLANO B (Menor Volume Primeiro)", encomendas, v, true);
-
-                exibirResultadoPlano(planoA);
-                exibirResultadoPlano(planoB);
-                exibirRecomendacao(planoA, planoB);
+        case 3: {
+            if (encomendas.empty()) {
+                cout << "[Aviso] Cadastre ao menos uma encomenda antes de simular.\n";
                 break;
             }
+            Veiculo v;
+            do {
+                cout << "Destino atendido pelo veiculo: ";
+                getline(cin, v.destinoAtendido);
+            } while (v.destinoAtendido.empty());
 
-            case 4:
-                executarTesteAceitacao(encomendas, contadorOrdem);
-                break;
+            v.capPeso = lerDoublePositivo("Capacidade de peso do veiculo (kg): ");
+            v.capVolume = lerDoublePositivo("Capacidade de volume do veiculo (m3): ");
+            v.temRefrigeracao = lerSimNao("O veiculo possui refrigeracao?");
 
-            case 0:
-                cout << "Encerrando sistema...\n";
-                break;
+            ResultadoPlano planoA = executarPlano("PLANO A (Ordem de Cadastro)", encomendas, v, false);
+            ResultadoPlano planoB = executarPlano("PLANO B (Menor Volume Primeiro)", encomendas, v, true);
 
-            default:
-                cout << "[Erro] Opcao invalida.\n";
+            exibirResultadoPlano(planoA);
+            exibirResultadoPlano(planoB);
+            exibirRecomendacao(planoA, planoB);
+            break;
+        }
+        case 4:
+            last_encomendas(encomendas, contadorOrdem);
+            break;
+
+        case 0:
+            cout << "Encerrando sistema...\n";
+            break;
+
+        default:
+            cout << "[Erro] Opcao invalida.\n";
         }
     } while (opcao != 0);
 
